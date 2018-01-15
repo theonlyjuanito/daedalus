@@ -29,15 +29,6 @@ copy nul  tls\ca\db\ca.db.attr
 echo 01 > tls\ca\db\ca.crt.srl
 @echo ============================================================================
 
-echo [2/10] Choosing OpenSSL message digest
-set MD=sha256
-echo Elected message digest '%MD%'
-echo Updating: ca.conf client.conf server.conf
-powershell -Command "(gc ca.conf)     -replace 'OPENSSL_MD', '%MD%' | Out-File -encoding ASCII ca.conf"
-powershell -Command "(gc client.conf) -replace 'OPENSSL_MD', '%MD%' | Out-File -encoding ASCII client.conf"
-powershell -Command "(gc server.conf) -replace 'OPENSSL_MD', '%MD%' | Out-File -encoding ASCII server.conf"
-echo ============================================================================
-
 @echo [3/10] Generating install-time-only use password for the CA key
 @echo %RANDOM%%RANDOM%%RANDOM%%RANDOM%%RANDOM%%RANDOM%%RANDOM%%RANDOM%%RANDOM%%RANDOM%%RANDOM%%RANDOM%%RANDOM%%RANDOM%%RANDOM%%RANDOM% > tls\secret
 @echo ============================================================================

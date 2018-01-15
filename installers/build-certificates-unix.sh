@@ -24,28 +24,6 @@ touch     tls/ca/db/ca.db.attr
 echo 01 > tls/ca/db/ca.crt.srl
 echo ============================================================================
 
-echo [2/10] Choosing OpenSSL message digest
-choose_message_digest() {
-        case $(uname -s) in
-                Linux )
-                        MD=sha256;;
-                Darwin )
-                        if test $(defaults read loginwindow SystemVersionStampAsString | cut -d. -f2) -ge 11
-                        then MD=sha256
-                        else MD=sha1
-                             echo "Warning: OS X pre-10.11 detected, using sha1 as OpenSSL message digest"
-                        fi;;
-        esac
-        echo "Elected message digest '${MD}'"
-}
-choose_message_digest
-echo "Updating:" {ca,client,server}.conf
-case $(uname -s) in
-        Linux )  sed -i    "s/OPENSSL_MD/${MD}/g" {ca,client,server}.conf;;
-        Darwin ) sed -i "" "s/OPENSSL_MD/${MD}/g" {ca,client,server}.conf;;
-esac
-echo ============================================================================
-
 echo [3/10] Generating install-time-only use password for the CA key
 echo "$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM" > tls/secret
 echo ============================================================================
